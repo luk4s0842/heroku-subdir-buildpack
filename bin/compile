@@ -1,0 +1,23 @@
+#!/usr/bin/env bash
+# bin/compile <build-dir> <cache-dir> <env-dir>
+
+BUILD_DIR=${1:-}
+CACHE_DIR=${2:-}
+ENV_DIR=${3:-}
+
+if [ -f $ENV_DIR/PROJECT_PATH ]; then
+	PROJECT_PATH=`cat $ENV_DIR/PROJECT_PATH`
+	if [ -d $BUILD_DIR/$PROJECT_PATH ]; then
+		echo "-----> Subdir buildpack in $PROJECT_PATH"
+		echo "       copy $PROJECT_PATH contents to root"
+		cp -R $BUILD_DIR/$PROJECT_PATH/. $BUILD_DIR/
+	 	echo "       delete subdir $PROJECT_PATH"
+		rm -rf $BUILD_DIR/$PROJECT_PATH
+		exit 0
+	fi
+fi
+
+echo "PROJECT_PATH is undefined"
+exit 1
+
+
